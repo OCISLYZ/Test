@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .list{
+      display: flex;
+      flex-flow: column;
+      justify-content: space-between;
+      margin: 100px auto;
+      width: 600px;
+      height: 300px;
+      color: rgb(255, 255, 255);
+    }
+    .list-item{
+      width: 100%;
+      height: 46px;
+      text-align: center;
+      line-height: 46px;
+      cursor: move;
+      user-select: none;
+      background-color: rgb(71, 65, 114);
+      border-radius: 8px;
+    }
+    .list-item.moving{
+      background: transparent;
+      color: transparent;
+    }
+  </style>
+</head>
+<body>
+  <div class="list">
+    <div draggable="true" class="list-item">1</div>
+    <div draggable="true" class="list-item">2</div>
+    <div draggable="true" class="list-item">3</div>
+    <div draggable="true" class="list-item">4</div>
+    <div draggable="true" class="list-item">5</div>
+  </div>
+</body>
+
+<script>
+  const list = document.querySelector('.list')
+  let sourceNode;
+  list.ondragstart = (e)=>{
+    setTimeout(()=>{
+      e.target.classList.add("moving")
+    },0)
+    sourceNode = e.target
+  };
+
+  list.ondragenter = (e)=>{
+    if(e.target === list || e.target ===sourceNode){
+      return
+    }
+    const children = Array.from(list.children)
+    const sourceIndex = children.indexOf(sourceNode)
+    const targetIndex = children.indexOf(e.target)
+    if(sourceIndex < targetIndex){
+      list.insertBefore(sourceNode,e.target.nextElementSibling)
+    }else{
+      list.insertBefore(sourceNode,e.target)
+    }
+  }
+
+  list.ondragend = (e)=>{
+    e.target.classList.remove("moving")
+  }
+</script>
+</html>
